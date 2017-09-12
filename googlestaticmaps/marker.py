@@ -4,11 +4,11 @@ from googlestaticmaps.projection import lon_to_x, lat_to_y
 
 class PointMarker(object):
 
-    def __init__(self, lat, lon, radius=5, color="red"):
+    def __init__(self, point, radius=5, color="red"):
+        self._lat = point[0]
+        self._lon = point[1]
         self._radius = radius
         self._color = color
-        self._lat = lat
-        self._lon = lon
 
     def draw(self, imgDraw, zoom, centerPoint, imgSize):
 
@@ -23,13 +23,13 @@ class PointMarker(object):
 
 class LineMarker(object):
 
-    def __init__(self, lat1, lon1, lat2, lon2, lineWidth=3, color="red"):
+    def __init__(self, point1, point2, lineWidth=3, color="red"):
+        self._lat1 = point1[0]
+        self._lon1 = point1[1]
+        self._lat2 = point2[0]
+        self._lon2 = point2[1]
         self._lineWidth = lineWidth
         self._color = color
-        self._lat1 = lat1
-        self._lon1 = lon1
-        self._lat2 = lat2
-        self._lon2 = lon2
 
     def draw(self, imgDraw, zoom, centerPoint, imgSize):
 
@@ -40,3 +40,23 @@ class LineMarker(object):
         y2 = lat_to_y(self._lat2, zoom) - lat_to_y(centerPoint[0], zoom) + imgSize[1] / 2
 
         imgDraw.line([(x1, y1), (x2, y2)], width=self._lineWidth, fill=self._color)
+
+
+class PolygonMarker(object):
+
+    def __init__(self, pointLst, color="red"):
+        self._points = pointLst
+        self._color = color
+
+    def draw(self, imgDraw, zoom, centerPoint, imgSize):
+
+        polygonPoints = []
+
+        for lat, lon in self._points:
+
+            x = lon_to_x(lon, zoom) - lon_to_x(centerPoint[1], zoom) + imgSize[0] / 2
+            y = lat_to_y(lat, zoom) - lat_to_y(centerPoint[0], zoom) + imgSize[1] / 2
+
+            polygonPoints.append((x, y))
+
+        imgDraw.polygon(polygonPoints, outline=self._color)
