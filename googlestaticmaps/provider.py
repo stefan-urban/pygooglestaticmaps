@@ -42,11 +42,9 @@ def get_map_at_latlon(lat, lon, zoom, imgSize=(500, 500), apikey=None, mapType=G
 
     # Wait for image download
     response = request.result()
+    #print(response.url)
 
     if response.status_code != 200:
-        print(response.status_code)
-        print(response.content)
-        print(apikey)
         raise Exception("Error while downloading map from Google Maps API.")
 
     img = Image.open(BytesIO(response.content))

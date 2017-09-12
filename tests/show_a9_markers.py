@@ -1,7 +1,9 @@
 
 from googlestaticmaps.provider import get_map_at_latlon
-from googlestaticmaps.marker import PointMarker, LineMarker, PolygonMarker
+from googlestaticmaps.marker import PointMarker, LineMarker, PolygonMarker, ArrowMarker
 
+
+poi = (48.268232, 11.645244)
 
 road_markings = [
     {'from': (48.268336, 11.645252), 'to': (48.268284, 11.645271)},
@@ -21,7 +23,7 @@ with open("googlemaps_apikey.txt") as fh:
     apikey = fh.read()
     fh.close()
 
-themap = get_map_at_latlon(48.268232, 11.645244, 21, (700, 700), apikey)
+themap = get_map_at_latlon(poi[0], poi[1], 21, (700, 700), apikey)
 
 # Point markers
 for road_marking in road_markings:
@@ -48,7 +50,14 @@ for road_marking in road_markings:
 # Polygon marker
 themap.addMarker(PolygonMarker(
     pointLst=road_polygon,
-    color="orange"
+    color="white"
+), inhibitRender=True)
+
+# Arrow marker
+themap.addMarker(ArrowMarker(
+    point=poi,
+    direction=1.9,
+    size=100
 ), inhibitRender=True)
 
 
