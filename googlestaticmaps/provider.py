@@ -29,13 +29,18 @@ def generate_url(lat, lon, zoom, imgSizeX, imgSizeY, mapType=GoogleMapType.Satel
     # Start download from Google Maps
     url = "https://maps.googleapis.com/maps/api/staticmap"
 
+    try:
+        mapTypeStr = mapType.value
+    except AttributeError:
+        mapTypeStr = str(mapType)
+
     payload = {
         'center': str(lat) + "," + str(lon),
         'zoom': str(zoom),
         'format': 'png32',
         'size': str(imgSizeX) + "x" + str(imgSizeY),
         'scale': '1',
-        'maptype': mapType.value,
+        'maptype': mapTypeStr,
         'key': apikey,
         #'markers': 'color:blue|label:S|48.268336,11.645252',
     }

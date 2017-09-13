@@ -87,26 +87,26 @@ class ArrowMarker(object):
         polygonPoints = []
 
         # Arrow head
-        dx = 3 / 4 * self._size * cos(self._direction)
-        dy = 3 / 4 * self._size * sin(self._direction)
+        dx = 3. / 4. * float(self._size) * cos(self._direction)
+        dy = 3. / 4. * float(self._size) * sin(self._direction)
 
         polygonPoints.append((x + dx, y - dy))
 
         # Left back
-        dx = -1 / 2 * self._size * cos(self._direction - pi/5)
-        dy = -1 / 2 * self._size * sin(self._direction - pi/5)
+        dx = -1. / 2. * float(self._size) * cos(self._direction - pi/5)
+        dy = -1. / 2. * float(self._size) * sin(self._direction - pi/5)
 
         polygonPoints.append((x + dx, y - dy))
 
         # Base
-        dx = -1 / 4 * self._size * cos(self._direction)
-        dy = -1 / 4 * self._size * sin(self._direction)
+        dx = -1. / 4. * float(self._size) * cos(self._direction)
+        dy = -1. / 4. * float(self._size) * sin(self._direction)
 
         polygonPoints.append((x + dx, y - dy))
 
         # Right back
-        dx = -1 / 2 * self._size * cos(self._direction + pi/5)
-        dy = -1 / 2 * self._size * sin(self._direction + pi/5)
+        dx = -1. / 2. * float(self._size) * cos(self._direction + pi/5)
+        dy = -1. / 2. * float(self._size) * sin(self._direction + pi/5)
 
         polygonPoints.append((x + dx, y - dy))
 
