@@ -3,6 +3,7 @@ from enum import Enum
 
 from PIL import Image
 from io import StringIO, BytesIO
+from requests.sessions import Session
 from requests_futures.sessions import FuturesSession
 
 from googlestaticmaps.map import Map
@@ -37,12 +38,14 @@ def get_map_at_latlon(lat, lon, zoom, imgSize=(500, 500), apikey=None, mapType=G
     }
 
     # Start API request
-    session = FuturesSession()
-    request = session.get(url, params=payload)
+    #session = FuturesSession()
+    session = Session()
 
-    # Wait for image download
-    response = request.result()
-    #print(response.url)
+    #request = session.get(url, params=payload)
+    # #response = request.result()
+
+    response = session.get(url, params=payload)
+
 
     if response.status_code != 200:
         raise Exception("Error while downloading map from Google Maps API.")
