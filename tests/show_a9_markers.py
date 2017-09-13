@@ -41,8 +41,7 @@ for road_marking in road_markings:
 # Line markers
 for road_marking in road_markings:
     themap.addMarker(LineMarker(
-        point1=road_marking['from'],
-        point2=road_marking['to'],
+        points=[road_marking['from'], road_marking['to']],
         lineWidth=3,
         color="green"
     ), inhibitRender=True)

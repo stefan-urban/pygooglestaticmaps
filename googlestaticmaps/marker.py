@@ -24,23 +24,23 @@ class PointMarker(object):
 
 class LineMarker(object):
 
-    def __init__(self, point1, point2, lineWidth=3, color="red"):
-        self._lat1 = point1[0]
-        self._lon1 = point1[1]
-        self._lat2 = point2[0]
-        self._lon2 = point2[1]
+    def __init__(self, points, lineWidth=3, color="red"):
+        self._points = points
         self._lineWidth = lineWidth
         self._color = color
 
     def draw(self, imgDraw, zoom, centerPoint, imgSize):
 
-        x1 = lon_to_x(self._lon1, zoom) - lon_to_x(centerPoint[1], zoom) + imgSize[0] / 2
-        y1 = lat_to_y(self._lat1, zoom) - lat_to_y(centerPoint[0], zoom) + imgSize[1] / 2
+        coords = []
 
-        x2 = lon_to_x(self._lon2, zoom) - lon_to_x(centerPoint[1], zoom) + imgSize[0] / 2
-        y2 = lat_to_y(self._lat2, zoom) - lat_to_y(centerPoint[0], zoom) + imgSize[1] / 2
+        for (lat, lon) in self._points:
 
-        imgDraw.line([(x1, y1), (x2, y2)], width=self._lineWidth, fill=self._color)
+            x = lon_to_x(lon, zoom) - lon_to_x(centerPoint[1], zoom) + imgSize[0] / 2
+            y = lat_to_y(lat, zoom) - lat_to_y(centerPoint[0], zoom) + imgSize[1] / 2
+
+            coords.append((x, y))
+
+        imgDraw.line(coords, width=self._lineWidth, fill=self._color)
 
 
 class PolygonMarker(object):
