@@ -72,7 +72,6 @@ class BoundingBox(object):
     def list(self):
         return np.array([self._southLat, self._westLon, self._northLat, self._eastLon])
 
-    @property
     def contains(self, lat, lon):
         if not self._southLat <= lat <= self._northLat:
             return False
