@@ -4,10 +4,20 @@ import numpy as np
 from googlestaticmaps.provider import get_map_at_latlon
 
 
+# Get google maps apikey
+try:
+    with open("googlemaps_apikey.txt") as fh:
+        googlemaps_apikey = fh.read()
+        fh.close()
+except IOError:
+    print("No google maps apikey found!")
+    quit(-1)
+
+
 def precalculated(lat, lon, zoom, imgSize):
 
     expectedResult = [48.14272340433031, 11.21429443359375, 48.25714137039319, 11.385955810546875]
-    result = get_map_at_latlon(lat, lon, zoom, imgSize).boundingBox.list
+    result = get_map_at_latlon(lat, lon, zoom, imgSize, googlemaps_apikey).boundingBox.list
 
     if not np.allclose(result, expectedResult, rtol=1.e-4, atol=1.e-6):
         return False
@@ -56,7 +66,7 @@ def bingmaps(lat, lon, zoom, imgSize):
     json_data = response.json()
 
     expectedResult = [float(x) for x in json_data['resourceSets'][0]['resources'][0]['bbox']]
-    result = get_map_at_latlon(lat, lon, zoom, imgSize).boundingBox.list
+    result = get_map_at_latlon(lat, lon, zoom, imgSize, googlemaps_apikey).boundingBox.list
 
     if not np.allclose(result, expectedResult, rtol=1.e-4, atol=1.e-8):
         return False

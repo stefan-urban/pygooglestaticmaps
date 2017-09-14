@@ -3,6 +3,16 @@ from googlestaticmaps.provider import get_map_at_latlon
 from googlestaticmaps.marker import PointMarker, LineMarker, PolygonMarker, ArrowMarker
 
 
+# Get google maps apikey
+try:
+    with open("googlemaps_apikey.txt") as fh:
+        googlemaps_apikey = fh.read()
+        fh.close()
+except IOError:
+    print("No google maps apikey found!")
+    quit(-1)
+
+
 poi = (48.268232, 11.645244)
 
 road_markings = [
@@ -19,11 +29,7 @@ road_polygon = [
 ]
 
 
-with open("googlemaps_apikey.txt") as fh:
-    apikey = fh.read()
-    fh.close()
-
-themap = get_map_at_latlon(poi[0], poi[1], 21, (700, 700), apikey)
+themap = get_map_at_latlon(poi[0], poi[1], 21, (700, 700), googlemaps_apikey)
 
 # Point markers
 for road_marking in road_markings:

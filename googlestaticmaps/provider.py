@@ -60,7 +60,7 @@ def get_map_at_latlon(lat, lon, zoom, imgSize=(500, 500), apikey=None, mapType=G
     response = session.get(generate_url(lat, lon, zoom, imgSize[0], imgSize[1], mapType, apikey))
 
     if response.status_code != 200:
-        raise Exception("Error while downloading map from Google Maps API.")
+        raise Exception("Error while downloading map from Google Maps API. (Error code " + str(response.status_code) + ")")
 
     img = Image.open(BytesIO(response.content))
 
