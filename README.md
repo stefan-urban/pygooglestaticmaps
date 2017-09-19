@@ -12,9 +12,6 @@ You need a Google Maps API key. Put it in a file called ```googlemaps_apikey.txt
 
 The Google Maps API provides images that are a few centimeters off. The reason is unknown.
 
-lat += 0.0
-lon += 0.000005
-
 ## Installation
 
 ```bash
@@ -28,7 +25,7 @@ Show part of the german Autobahn A9.
 ```python
 from googlestaticmaps.provider import get_map_at_latlon
 
-themap = get_map_at_latlon(lat=48.268232, lon=11.645244, zoom=21, imgSize=(700, 700), apikey="123456")
+themap = get_map_at_latlon(lon=11.645244, lat=48.268232, zoom=21, imgSize=(700, 700), apikey="123456")
 
 themap.mapImage.show()
 ```
@@ -39,28 +36,28 @@ Addionally you can create markers on the map, based on lat/lon data:
 from googlestaticmaps.marker import PointMarker
 
 road_markings = [
-    {'from': (48.268336, 11.645252), 'to': (48.268284, 11.645271)},
-    {'from': (48.268330, 11.645202), 'to': (48.268279, 11.645220)},
-    {'from': (48.268167, 11.645209), 'to': (48.268115, 11.645227)},
+    {'from': (11.645252, 48.268336), 'to': (11.645271, 48.268284)},
+    {'from': (11.645202, 48.268330), 'to': (11.645220, 48.268279)},
+    {'from': (11.645209, 48.268167), 'to': (11.645227, 48.268115)},
 ]
 
 # Point markers
 for road_marking in road_markings:
     themap.addMarker(PointMarker(
-        lat=road_marking['from'][0],
-        lon=road_marking['from'][1],
+        lon=road_marking['from'][0],
+        lat=road_marking['from'][1],
         radius=4,
-        color="red"),
+        outline="red"),
         inhibitRender=True
     )
 
 # Line markers
 for road_marking in road_markings:
     themap.addMarker(LineMarker(
-        lat1=road_marking['from'][0],
-        lon1=road_marking['from'][1],
-        lat2=road_marking['to'][0],
-        lon2=road_marking['to'][1],
+        lon1=road_marking['from'][0],
+        lat1=road_marking['from'][1],
+        lon2=road_marking['to'][0],
+        lat2=road_marking['to'][1],
         lineWidth=3,
         color="green"
     ), inhibitRender=True)

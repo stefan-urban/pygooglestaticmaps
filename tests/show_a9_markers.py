@@ -62,6 +62,16 @@ for road_marking in road_markings:
         color="green"
     ), inhibitRender=True)
 
+themap.addMarker(LineMarker(
+    points=[
+        (11.645303, 48.268344),
+        (11.645374, 48.268135)
+    ],
+    lineWidth=1,
+    color="red",
+    markerColor="green"
+))
+
 # Polygon marker
 themap.addMarker(PolygonMarker(
     pointLst=road_polygon,

@@ -11,5 +11,5 @@ except IOError:
     print("No google maps apikey found!")
     quit(-1)
 
-img = get_map_at_lonlat(11.620967, 48.316362, 16, apikey=apikey, imgSize=(700, 700), mapType=GoogleMapType.Hybrid).mapImage
+img = get_map_at_lonlat(11.620967, 48.316362, 16, apikey=googlemaps_apikey, imgSize=(700, 700), mapType=GoogleMapType.Hybrid).mapImage
 img.show()

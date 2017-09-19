@@ -121,13 +121,18 @@ class CarMarker(object):
 
 class LineMarker(object):
 
-    def __init__(self, points, lineWidth=3, color="red", markerColor="green"):
+    def __init__(self, points, lineWidth=3, color="red", markerColor=None):
         self._points = points
         self._lineWidth = lineWidth
         self._color = color
         self._markerColor = markerColor
 
     def draw(self, imgDraw, zoom, centerPoint, imgSize):
+
+        if self._markerColor:
+
+            for (lon, lat) in self._points:
+                PointMarker((lon, lat), radius=self._lineWidth*3, fill=self._color, outline=self._markerColor).draw(imgDraw, zoom, centerPoint, imgSize)
 
         cX, cY = convert_lonlat_to_px(centerPoint[0], centerPoint[1], zoom)
 
@@ -143,3 +148,4 @@ class LineMarker(object):
             coords.append((x, y))
 
         imgDraw.line(coords, width=self._lineWidth, fill=self._color)
+
