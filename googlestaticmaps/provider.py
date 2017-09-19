@@ -21,6 +21,7 @@ class GoogleMapType(Enum):
     Satellite = "satellite"
     Hybrid = "hybrid"
     Terrain = "terrain"
+    Dummy = "dummy"
 
 
 def generate_url(lat, lon, zoom, imgSizeX, imgSizeY, apikey, mapType=GoogleMapType.Satellite):
@@ -71,7 +72,11 @@ def get_map_at_lonlat(lon, lat, zoom, apikey, imgSize=(256, 256), mapType=Google
     # Start API request
     request_url = generate_url(lat, lon, zoom, imgSize[0], imgSize[1], apikey, mapType)
 
-    img = download_image(request_url)
+    if mapType == GoogleMapType.Dummy:
+        img = Image.new('RGB', imgSize, (70, 70, 70))
+    else:
+        img = download_image(request_url)
+
 
     # Calculate bounding box
     bbox = BoundingBox.createFromCenterPointLonLat(lon, lat, zoom, img.size)

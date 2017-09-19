@@ -28,7 +28,7 @@ class BoundingBox(object):
     def list(self):
         return [self._southLat, self._westLon, self._northLat, self._eastLon]
 
-    def contains(self, lat, lon):
+    def contains(self, lon, lat):
         if not self._southLat <= lat <= self._northLat:
             return False
 
