@@ -1,21 +1,20 @@
 
+from functools import lru_cache
 from enum import Enum
+from io import BytesIO
 
 from PIL import Image
-from io import StringIO, BytesIO
 from requests.sessions import Session
-from requests_futures.sessions import FuturesSession
 
 try:
-    import urlparse
     from urllib import urlencode
-except: # For Python 3
-    import urllib.parse as urlparse
+except ImportError:
     from urllib.parse import urlencode
 
 
 from googlestaticmaps.map import Map
 from googlestaticmaps.boundingBox import BoundingBox
+
 
 class GoogleMapType(Enum):
     Roadmap = "roadmap"
@@ -24,7 +23,7 @@ class GoogleMapType(Enum):
     Terrain = "terrain"
 
 
-def generate_url(lat, lon, zoom, imgSizeX, imgSizeY, mapType=GoogleMapType.Satellite, apikey=None):
+def generate_url(lat, lon, zoom, imgSizeX, imgSizeY, apikey, mapType=GoogleMapType.Satellite):
 
     # Start download from Google Maps
     url = "https://maps.googleapis.com/maps/api/staticmap"
@@ -47,8 +46,22 @@ def generate_url(lat, lon, zoom, imgSizeX, imgSizeY, mapType=GoogleMapType.Satel
 
     return url + "?" + urlencode(payload)
 
+@lru_cache(maxsize=320000)
+def download_image(request_url):
+    session = Session()
 
-def get_map_at_latlon(lat, lon, zoom, imgSize=(500, 500), apikey=None, mapType=GoogleMapType.Satellite):
+    try:
+        response = session.get(request_url)
+    finally:
+        session.close()
+
+    if response.status_code != 200:
+        raise Exception("Error while downloading map from Google Maps API.")
+
+    return Image.open(BytesIO(response.content))
+
+
+def get_map_at_lonlat(lon, lat, zoom, apikey, imgSize=(256, 256), mapType=GoogleMapType.Satellite):
 
     # Get apikey from env
     if apikey is None:
@@ -56,15 +69,11 @@ def get_map_at_latlon(lat, lon, zoom, imgSize=(500, 500), apikey=None, mapType=G
         apikey = os.getenv("GOOGLEMAPS_STATICMAP_APIKEY")
 
     # Start API request
-    session = Session()
-    response = session.get(generate_url(lat, lon, zoom, imgSize[0], imgSize[1], mapType, apikey))
+    request_url = generate_url(lat, lon, zoom, imgSize[0], imgSize[1], apikey, mapType)
 
-    if response.status_code != 200:
-        raise Exception("Error while downloading map from Google Maps API.")
-
-    img = Image.open(BytesIO(response.content))
+    img = download_image(request_url)
 
     # Calculate bounding box
-    bbox = BoundingBox.createFromCenterPoint(lat, lon, zoom, img.size)
+    bbox = BoundingBox.createFromCenterPointLonLat(lon, lat, zoom, img.size)
 
-    return Map(img, (lat, lon), zoom, bbox)
+    return Map(img, (lon, lat), zoom, bbox)

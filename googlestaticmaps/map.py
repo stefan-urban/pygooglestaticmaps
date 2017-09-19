@@ -1,5 +1,5 @@
 
-from PIL import ImageDraw
+from PIL import Image, ImageDraw
 
 
 class Map(object):
@@ -43,13 +43,15 @@ class Map(object):
 
     def render(self):
         """ Draws all markers """
-        self._renderedMapImage = self._mapImage
+        self._renderedMapImage = self._mapImage.convert('RGBA')
 
-        draw = ImageDraw.Draw(self._renderedMapImage)
+        drawImg = Image.new('RGBA', self._renderedMapImage.size, (0, 0, 0, 0))
+
+        draw = ImageDraw.Draw(drawImg, 'RGBA')
 
         for marker in self._markers:
             marker.draw(draw, self._zoom, self._centerPoint, self._renderedMapImage.size)
 
         del draw
 
-        return self._renderedMapImage
+        return Image.alpha_composite(self._renderedMapImage, drawImg)
