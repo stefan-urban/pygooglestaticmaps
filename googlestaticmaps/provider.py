@@ -1,5 +1,4 @@
 
-from functools import lru_cache
 from enum import Enum
 from io import BytesIO
 
@@ -47,7 +46,7 @@ def generate_url(lat, lon, zoom, imgSizeX, imgSizeY, apikey, mapType=GoogleMapTy
 
     return url + "?" + urlencode(payload)
 
-@lru_cache(maxsize=320000)
+
 def download_image(request_url):
     session = Session()
 
