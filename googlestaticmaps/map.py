@@ -45,13 +45,23 @@ class Map(object):
         """ Draws all markers """
         self._renderedMapImage = self._mapImage.convert('RGBA')
 
-        drawImg = Image.new('RGBA', self._renderedMapImage.size, (0, 0, 0, 0))
+        images = [self._mapImage.convert('RGBA')]
 
-        draw = ImageDraw.Draw(drawImg, 'RGBA')
 
         for marker in self._markers:
+            # Create image
+            drawImg = Image.new('RGBA', self._renderedMapImage.size, (0, 0, 0, 0))
+            draw = ImageDraw.Draw(drawImg, 'RGBA')
+
+            # Hand over to the marker to draw itself
             marker.draw(draw, self._zoom, self._centerPoint, self._renderedMapImage.size)
 
-        del draw
+            images.append(drawImg)
+            del draw
 
-        return Image.alpha_composite(self._renderedMapImage, drawImg)
+
+        # Copy everything onto first image
+        for image in images[1:]:
+            self._renderedMapImage = Image.alpha_composite(self._renderedMapImage, image)
+
+        return self._renderedMapImage

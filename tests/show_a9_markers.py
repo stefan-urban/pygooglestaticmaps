@@ -22,6 +22,9 @@ road_polygon = [
     (11.645305, 48.268180)
 ]
 
+diff = 0.00002
+road_polygon_overlap = [(lon + diff, lat + diff) for lon, lat in road_polygon]
+
 car = {
     'pos': (11.645237, 48.268307),
     'width': 17 / 12 * 2.0,
@@ -75,8 +78,14 @@ themap.addMarker(LineMarker(
 # Polygon marker
 themap.addMarker(PolygonMarker(
     pointLst=road_polygon,
-    outline="white",
+    outline="green",
     fill=(0, 255, 0, 60)
+), inhibitRender=True)
+
+themap.addMarker(PolygonMarker(
+    pointLst=road_polygon_overlap,
+    outline="red",
+    fill=(255, 0, 0, 60)
 ), inhibitRender=True)
 
 # Arrow marker
