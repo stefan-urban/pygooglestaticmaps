@@ -28,7 +28,7 @@ road_polygon_overlap = [(lon + diff, lat + diff) for lon, lat in road_polygon]
 car = {
     'pos': (11.645237, 48.268307),
     'width': 17 / 12 * 2.0,
-    'length': 17 / 12 * 4.2,
+    'length': 17 / 12 * 6.0,
     'heading': 1.8
 }
 

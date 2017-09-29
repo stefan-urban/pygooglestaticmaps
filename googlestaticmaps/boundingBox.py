@@ -1,7 +1,7 @@
 
 import numpy as np
 
-from googlestaticmaps.projection import convert_lonlat_to_px, convert_px_to_lonlat
+from googlestaticmaps.projection import convert_ll_to_px, convert_px_to_ll
 
 
 class BoundingBox(object):
@@ -10,10 +10,10 @@ class BoundingBox(object):
     def createFromCenterPointLonLat(lon, lat, zoom, imSize):
 
         # Convert to pixel coordinates
-        center_x, center_y = convert_lonlat_to_px(lon, lat, zoom)
+        center_x, center_y = convert_ll_to_px(lon, lat, zoom)
 
-        westLon, northLat = convert_px_to_lonlat(center_x - imSize[0]/2., center_y - imSize[1]/2., zoom)
-        eastLon, southLat = convert_px_to_lonlat(center_x + imSize[0]/2., center_y + imSize[1]/2., zoom)
+        westLon, northLat = convert_px_to_ll(center_x - imSize[0]/2., center_y - imSize[1]/2., zoom)
+        eastLon, southLat = convert_px_to_ll(center_x + imSize[0]/2., center_y + imSize[1]/2., zoom)
 
         return BoundingBox(southLat, westLon, northLat, eastLon)
 

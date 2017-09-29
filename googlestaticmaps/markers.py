@@ -1,7 +1,7 @@
 
 import math
 
-from googlestaticmaps.projection import convert_lonlat_to_px, convert_lonlat_to_merc, convert_merc_to_lonlat
+from googlestaticmaps.projection import convert_ll_to_px, convert_ll_to_wm, convert_wm_to_ll
 
 
 class PointMarker(object):
@@ -15,8 +15,8 @@ class PointMarker(object):
 
     def draw(self, imgDraw, zoom, centerPoint, imgSize):
 
-        X, Y = convert_lonlat_to_px(self._lon, self._lat, zoom)
-        cX, cY = convert_lonlat_to_px(centerPoint[0], centerPoint[1], zoom)
+        X, Y = convert_ll_to_px(self._lon, self._lat, zoom)
+        cX, cY = convert_ll_to_px(centerPoint[0], centerPoint[1], zoom)
 
         x = X - cX + imgSize[0] / 2
         y = Y - cY + imgSize[1] / 2
@@ -42,8 +42,8 @@ class PolygonMarker(object):
 
         for lon, lat in self._points:
 
-            X, Y = convert_lonlat_to_px(lon, lat, zoom)
-            cX, cY = convert_lonlat_to_px(centerPoint[0], centerPoint[1], zoom)
+            X, Y = convert_ll_to_px(lon, lat, zoom)
+            cX, cY = convert_ll_to_px(centerPoint[0], centerPoint[1], zoom)
 
             x = X - cX + imgSize[0] / 2
             y = Y - cY + imgSize[1] / 2
@@ -68,7 +68,7 @@ class ArrowMarker(object):
 
         alpha = math.radians(40)
 
-        merc_cX, merc_cY = convert_lonlat_to_merc(self._lon, self._lat)
+        merc_cX, merc_cY = convert_ll_to_wm(self._lon, self._lat)
 
         distances = [0.6 * self._size, 0.6 * self._size, 0.3 * self._size, 0.6 * self._size]
         angles = [self._hdg, self._hdg + math.pi - alpha, self._hdg + math.pi, self._hdg + math.pi + alpha]
@@ -79,7 +79,7 @@ class ArrowMarker(object):
             merc_x = merc_cX + distance * math.cos(angle)
             merc_y = merc_cY + distance * math.sin(angle)
 
-            lon, lat = convert_merc_to_lonlat(merc_x, merc_y)
+            lon, lat = convert_wm_to_ll(merc_x, merc_y)
 
             polygonPoints.append((lon, lat))
 
@@ -97,7 +97,7 @@ class CarMarker(object):
 
     def draw(self, imgDraw, zoom, centerPoint, imgSize):
 
-        merc_cX, merc_cY = convert_lonlat_to_merc(self._point[0], self._point[1])
+        merc_cX, merc_cY = convert_ll_to_wm(self._point[0], self._point[1])
 
         # Draw outer box
         distance = 0.5 * math.hypot(self._width, self._length)
@@ -111,7 +111,7 @@ class CarMarker(object):
             merc_x = merc_cX + distance * math.cos(angle)
             merc_y = merc_cY + distance * math.sin(angle)
 
-            lon, lat = convert_merc_to_lonlat(merc_x, merc_y)
+            lon, lat = convert_wm_to_ll(merc_x, merc_y)
 
             polygonPoints.append((lon, lat))
 
@@ -134,13 +134,13 @@ class LineMarker(object):
             for (lon, lat) in self._points:
                 PointMarker((lon, lat), radius=self._lineWidth*3, fill=self._color, outline=self._markerColor).draw(imgDraw, zoom, centerPoint, imgSize)
 
-        cX, cY = convert_lonlat_to_px(centerPoint[0], centerPoint[1], zoom)
+        cX, cY = convert_ll_to_px(centerPoint[0], centerPoint[1], zoom)
 
         coords = []
 
         for (lon, lat) in self._points:
 
-            X, Y = convert_lonlat_to_px(lon, lat, zoom)
+            X, Y = convert_ll_to_px(lon, lat, zoom)
 
             x = X - cX + imgSize[0] / 2
             y = Y - cY + imgSize[1] / 2

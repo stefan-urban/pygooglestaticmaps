@@ -1,7 +1,8 @@
 
-from googlestaticmaps.projection import convert_lonlat_to_px, convert_lonlat_to_merc, \
-                                        convert_merc_to_lonlat, convert_merc_to_px, \
-                                        convert_px_to_lonlat, convert_px_to_merc
+from googlestaticmaps.projection import convert_ll_to_px, convert_ll_to_xy, \
+                                        convert_xy_to_ll, convert_xy_to_px, \
+                                        convert_px_to_ll, convert_px_to_xy, \
+                                        convert_ll_to_wm, convert_wm_to_ll
 
 from googlestaticmaps.map import Map
 from googlestaticmaps.markers import PointMarker, PolygonMarker, CarMarker, ArrowMarker, LineMarker
