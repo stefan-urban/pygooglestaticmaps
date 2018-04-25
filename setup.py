@@ -11,5 +11,8 @@ setup(name='googlestaticmaps',
       packages=find_packages(),
       install_requires=[
           "requests-futures",
+          "numpy",
+          "pyproj",
+          "Pillow-PIL",
       ]
      )

@@ -1,0 +1,4 @@
+requests-futures
+numpy
+pyproj
+Pillow-PIL

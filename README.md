@@ -1,6 +1,6 @@
 
-Google Maps Static Images
-=========================
+Google Maps Static Images with Markers
+======================================
 
 ## Information
 
@@ -20,12 +20,12 @@ pip install https://github.com/stefan-urban/pygooglestaticmaps/archive/master.zi
 
 ## Examples
 
-Show part of the german Autobahn A9.
+Show part of the german Autobahn A9. A Google Static Maps API key can be generated at https://developers.google.com/maps/documentation/static-maps/.
 
 ```python
-from googlestaticmaps.provider import get_map_at_latlon
+from googlestaticmaps.provider import get_map_at_lonlat
 
-themap = get_map_at_latlon(lon=11.645244, lat=48.268232, zoom=21, imgSize=(700, 700), apikey="123456")
+themap = get_map_at_lonlat(lon=11.645244, lat=48.268232, zoom=21, imgSize=(700, 700), apikey="123456")
 
 themap.mapImage.show()
 ```
@@ -33,7 +33,7 @@ themap.mapImage.show()
 Addionally you can create markers on the map, based on lat/lon data:
 
 ```python
-from googlestaticmaps.marker import PointMarker
+from googlestaticmaps.markers import PointMarker, LineMarker
 
 road_markings = [
     {'from': (11.645252, 48.268336), 'to': (11.645271, 48.268284)},
@@ -44,8 +44,7 @@ road_markings = [
 # Point markers
 for road_marking in road_markings:
     themap.addMarker(PointMarker(
-        lon=road_marking['from'][0],
-        lat=road_marking['from'][1],
+        road_marking['from'],
         radius=4,
         outline="red"),
         inhibitRender=True
@@ -54,13 +53,14 @@ for road_marking in road_markings:
 # Line markers
 for road_marking in road_markings:
     themap.addMarker(LineMarker(
-        lon1=road_marking['from'][0],
-        lat1=road_marking['from'][1],
-        lon2=road_marking['to'][0],
-        lat2=road_marking['to'][1],
+        [road_marking['from'], road_marking['to']],
         lineWidth=3,
         color="green"
     ), inhibitRender=True)
 
 themap.render().show()
+
+
 ```
+
+![Marker Sample](gmaps-sample.png "Markers on a Google Static Maps map")
